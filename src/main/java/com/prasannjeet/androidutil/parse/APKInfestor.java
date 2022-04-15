@@ -1,4 +1,4 @@
-package com.prasannjeet.manifestparser.parse;
+package com.prasannjeet.androidutil.parse;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -10,9 +10,9 @@ import com.ebmwebsourcing.easycommons.xml.XMLPrettyPrinter;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.ltpeacock.sorter.xml.SortXMLEngine;
-import com.prasannjeet.manifestparser.dto.manifest;
-import com.prasannjeet.manifestparser.dto.manifest.Action;
-import com.prasannjeet.manifestparser.dto.manifest.IntentFilter;
+import com.prasannjeet.androidutil.dto.manifest;
+import com.prasannjeet.androidutil.dto.manifest.Action;
+import com.prasannjeet.androidutil.dto.manifest.IntentFilter;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
