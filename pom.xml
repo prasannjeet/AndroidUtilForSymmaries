@@ -30,6 +30,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <apktool.version>2.6.1</apktool.version>
+        <project.scm.id>github</project.scm.id>
     </properties>
     
     <organization>
