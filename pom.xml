@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!--
+  ~ Copyright 2013 the original author or authors.
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.prasannjeet</groupId>
-    <artifactId>manifestparser</artifactId>
+    <artifactId>androidutil</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <name>Android Utility</name>
+    <description>A utility library for APK files. Parses manifest file and creates many utility methods for Symmaries.</description>
+    <url>https://github.com/prasannjeet/AndroidUtilForSymmaries</url>
     
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -14,8 +33,60 @@
         <apktool.version>2.6.1</apktool.version>
     </properties>
     
+    <organization>
+        <name>Prasannjeet</name>
+        <url>http://www.prasannjeet.com</url>
+    </organization>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <name>Prasannjeet Singh</name>
+            <email>prasannjeetsingh@gmail.com</email>
+        </developer>
+    </developers>
+    
+    <scm>
+        <connection>scm:git:https://github.com/prasannjeet/AndroidUtilForSymmaries.git</connection>
+        <developerConnection>scm:git:ssh://github.com/prasannjeet/AndroidUtilForSymmaries.git</developerConnection>
+        <url>https://github.com/prasannjeet/AndroidUtilForSymmaries/tree/main</url>
+    </scm>
+    
+    <repositories>
+        <repository>
+            <id>soot-release</id>
+            <name>Soot Release</name>
+            <url>https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release/</url>
+        </repository>
+    </repositories>
+    
     
     <dependencies>
+        <!--Soot-->
+        <dependency>
+            <artifactId>soot</artifactId>
+            <groupId>ca.mcgill.sable</groupId>
+            <version>4.1.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>soot-infoflow-android</artifactId>
+            <groupId>de.tud.sse</groupId>
+            <version>2.7.1</version>
+        </dependency>
+    
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+        
         <!-- https://mvnrepository.com/artifact/org.apktool/apktool-cli -->
         <dependency>
             <groupId>org.apktool</groupId>
@@ -84,50 +155,151 @@
 
     </dependencies>
     
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    
     <build>
         <plugins>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>android.util</pattern>
-                                    <shadedPattern>com.prasannjeet.android.util</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>android.content.res</pattern>
-                                    <shadedPattern>com.prasannjeet.android.content.res</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.jf</pattern>
-                                    <shadedPattern>com.prasannjeet.org.jf</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+    
+            <!--Distribution Management Authentication Plugin and Nexus Staging Plugin-->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>fully.qualified.MainClass</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
+            <!--Javadoc Plugin-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <!-- set encoding to utf-8 to avoid encoding issues with special characters -->
+                <configuration>
+                    <source>11</source>
+                    <detectJavaApiLink>false</detectJavaApiLink>
+                    <encoding>utf-8</encoding>
+                </configuration>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--GPG Signed Plugin-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Release Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <version>3.3.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>shade</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <relocations>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>android.util</pattern>-->
+<!--                                    <shadedPattern>com.prasannjeet.android.util</shadedPattern>-->
+<!--                                </relocation>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>android.content.res</pattern>-->
+<!--                                    <shadedPattern>com.prasannjeet.android.content.res</shadedPattern>-->
+<!--                                </relocation>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>org.jf</pattern>-->
+<!--                                    <shadedPattern>com.prasannjeet.org.jf</shadedPattern>-->
+<!--                                </relocation>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>android.util.TypedValue</pattern>-->
+<!--                                    <shadedPattern>com.prasannjeet.android.util.MyTypedValue</shadedPattern>-->
+<!--                                </relocation>-->
+<!--                            </relocations>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>fully.qualified.MainClass</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
     
