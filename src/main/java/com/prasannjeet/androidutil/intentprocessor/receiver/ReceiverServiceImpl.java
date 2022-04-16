@@ -7,6 +7,7 @@ import static com.prasannjeet.androidutil.intentprocessor.receiver.method.Receiv
 
 import com.prasannjeet.androidutil.intentprocessor.receiver.method.IntentCallingMethod;
 import com.prasannjeet.androidutil.intentprocessor.receiver.method.ReceiverMethod;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
@@ -21,7 +22,8 @@ public class ReceiverServiceImpl implements ReceiverService {
 
   public ReceiverServiceImpl(Map<String, List<String>> intentFiltersByActivity) {
     this.receiverMethod = new ReceiverMethod();
-    this.receiverMethod.init(true);
+    this.receiverMethod.init(false); //TODO Let initializer decide if it is static or not
+    this.receiverBodies = new ArrayList<>();
     this.intentFiltersByActivity = intentFiltersByActivity;
   }
 

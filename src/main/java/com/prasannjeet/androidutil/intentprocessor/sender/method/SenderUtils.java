@@ -187,7 +187,7 @@ public class SenderUtils {
               .append(declaringClass)
               .append(":")
               .append(methodName)
-              .append("(android.content.Intent )")
+              .append("(android.content.Intent intent)")
               .append("\n");
           sb.append("{\n");
           sb.append("\t  ").append("com.intentpropagator.Capture $u1;\n");
