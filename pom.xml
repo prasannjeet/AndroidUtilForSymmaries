@@ -19,7 +19,7 @@
     
     <groupId>com.prasannjeet</groupId>
     <artifactId>androidutil</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     
     <name>Android Utility</name>
@@ -55,7 +55,7 @@
         <connection>scm:git:https://github.com/prasannjeet/AndroidUtilForSymmaries.git</connection>
         <developerConnection>scm:git:ssh://github.com/prasannjeet/AndroidUtilForSymmaries.git</developerConnection>
         <url>https://github.com/prasannjeet/AndroidUtilForSymmaries/tree/main</url>
-      <tag>androidutil-1.0</tag>
+      <tag>androidutil-1.1</tag>
   </scm>
     
     <repositories>
