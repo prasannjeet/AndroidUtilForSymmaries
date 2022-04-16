@@ -29,7 +29,6 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <apktool.version>2.6.1</apktool.version>
         <project.scm.id>github</project.scm.id>
     </properties>
     
@@ -71,14 +70,16 @@
     <dependencies>
         <!--Soot-->
         <dependency>
-            <artifactId>soot</artifactId>
             <groupId>ca.mcgill.sable</groupId>
+            <artifactId>soot</artifactId>
             <version>4.1.0</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <artifactId>soot-infoflow-android</artifactId>
             <groupId>de.tud.sse</groupId>
+            <artifactId>soot-infoflow-android</artifactId>
             <version>2.7.1</version>
+            <optional>true</optional>
         </dependency>
     
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
@@ -86,41 +87,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.apktool/apktool-cli -->
-        <dependency>
-            <groupId>org.apktool</groupId>
-            <artifactId>apktool-cli</artifactId>
-            <version>${apktool.version}</version>
-        </dependency>
-    
-        <!-- https://mvnrepository.com/artifact/org.apktool/brut.j.dir -->
-        <dependency>
-            <groupId>org.apktool</groupId>
-            <artifactId>brut.j.dir</artifactId>
-            <version>${apktool.version}</version>
-        </dependency>
-    
-        <!-- https://mvnrepository.com/artifact/org.apktool/apktool-lib -->
-        <dependency>
-            <groupId>org.apktool</groupId>
-            <artifactId>apktool-lib</artifactId>
-            <version>${apktool.version}</version>
-        </dependency>
-    
-        <!-- https://mvnrepository.com/artifact/org.apktool/brut.j.util -->
-        <dependency>
-            <groupId>org.apktool</groupId>
-            <artifactId>brut.j.util</artifactId>
-            <version>${apktool.version}</version>
-        </dependency>
-    
-        <!-- https://mvnrepository.com/artifact/org.apktool/brut.j.common -->
-        <dependency>
-            <groupId>org.apktool</groupId>
-            <artifactId>brut.j.common</artifactId>
-            <version>${apktool.version}</version>
         </dependency>
     
         <dependency>
@@ -152,6 +118,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.13.0</version>
         </dependency>
 
     </dependencies>
@@ -254,53 +226,6 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
-            
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-shade-plugin</artifactId>-->
-<!--                <version>3.3.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>shade</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <relocations>-->
-<!--                                <relocation>-->
-<!--                                    <pattern>android.util</pattern>-->
-<!--                                    <shadedPattern>com.prasannjeet.android.util</shadedPattern>-->
-<!--                                </relocation>-->
-<!--                                <relocation>-->
-<!--                                    <pattern>android.content.res</pattern>-->
-<!--                                    <shadedPattern>com.prasannjeet.android.content.res</shadedPattern>-->
-<!--                                </relocation>-->
-<!--                                <relocation>-->
-<!--                                    <pattern>org.jf</pattern>-->
-<!--                                    <shadedPattern>com.prasannjeet.org.jf</shadedPattern>-->
-<!--                                </relocation>-->
-<!--                                <relocation>-->
-<!--                                    <pattern>android.util.TypedValue</pattern>-->
-<!--                                    <shadedPattern>com.prasannjeet.android.util.MyTypedValue</shadedPattern>-->
-<!--                                </relocation>-->
-<!--                            </relocations>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <artifactId>maven-assembly-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <mainClass>fully.qualified.MainClass</mainClass>-->
-<!--                        </manifest>-->
-<!--                    </archive>-->
-<!--                    <descriptorRefs>-->
-<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
-<!--                    </descriptorRefs>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
         </plugins>
     </build>
     

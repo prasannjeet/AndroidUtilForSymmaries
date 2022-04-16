@@ -1,4 +1,4 @@
-package com.prasannjeet.androidutil.intentprocessor.sender;
+package com.prasannjeet.androidutil.intentprocessor.sender.method;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

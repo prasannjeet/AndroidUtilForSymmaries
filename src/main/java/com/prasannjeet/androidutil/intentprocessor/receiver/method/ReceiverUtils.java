@@ -1,4 +1,4 @@
-package com.prasannjeet.androidutil.intentprocessor.receiver;
+package com.prasannjeet.androidutil.intentprocessor.receiver.method;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,13 +37,16 @@ public class ReceiverUtils {
     return flag;
   }
 
-  public static boolean isMethodFromEligibleActivityReceivingIntent(Body body, Map<String, List<String>> intentsPerActivity) {
-    Set<String> allSuperClasses = new HashSet<>(getAllSuperClasses(body.getMethod().getDeclaringClass()));
+  public static boolean isMethodFromEligibleActivityReceivingIntent(
+      Body body, Map<String, List<String>> intentsPerActivity) {
+    Set<String> allSuperClasses =
+        new HashSet<>(getAllSuperClasses(body.getMethod().getDeclaringClass()));
     allSuperClasses.add(body.getMethod().getDeclaringClass().getName());
 
     Set<String> allIntentClasses = intentsPerActivity.keySet();
 
-    Collection<String> commonItems = CollectionUtils.intersection(allSuperClasses,allIntentClasses);
+    Collection<String> commonItems =
+        CollectionUtils.intersection(allSuperClasses, allIntentClasses);
     return commonItems.size() > 0;
   }
 
@@ -61,12 +64,19 @@ public class ReceiverUtils {
     return superClasses;
   }
 
-  public static IntentCallingMethod createIntermediateMethod(Body body, Map<String, List<String>> intentsByActivity) {
+  public static IntentCallingMethod createIntermediateMethod(
+      Body body, Map<String, List<String>> intentsByActivity) {
     String methodName = body.getMethod().getName();
-    List<String> allParamTypes = body.getMethod().getParameterTypes().stream().map(Type::toString).collect(Collectors.toList());
+    List<String> allParamTypes =
+        body.getMethod().getParameterTypes().stream()
+            .map(Type::toString)
+            .collect(Collectors.toList());
     String thisClassName = body.getMethod().getDeclaringClass().getName();
 
-    Set<String> allSuperClasses = getAllSuperClasses(body.getMethod().getDeclaringClass()).stream().distinct().collect(Collectors.toSet());
+    Set<String> allSuperClasses =
+        getAllSuperClasses(body.getMethod().getDeclaringClass()).stream()
+            .distinct()
+            .collect(Collectors.toSet());
     allSuperClasses.add(body.getMethod().getDeclaringClass().getName());
 
     String thisActivity = null;
@@ -83,25 +93,27 @@ public class ReceiverUtils {
     }
 
     List<String> intentsForThisActivity = intentsByActivity.get(thisActivity);
-    intentsForThisActivity = intentsForThisActivity.stream()
-        .map(i -> i.replace("android.intent.action.", ""))
-        .collect(Collectors.toList());
+    intentsForThisActivity =
+        intentsForThisActivity.stream()
+            .map(i -> i.replace("android.intent.action.", ""))
+            .collect(Collectors.toList());
 
-    //Remove last parameter (intent) from the list
+    // Remove last parameter (intent) from the list
     allParamTypes.remove(allParamTypes.size() - 1);
 
-    return new IntentCallingMethod(intentsForThisActivity, allParamTypes, thisClassName, methodName);
+    return new IntentCallingMethod(
+        intentsForThisActivity, allParamTypes, thisClassName, methodName);
   }
 
-  public static  IntentCallingMethod injectIntentInsideReceivingMethod(Body body,
-      Map<String, List<String>> intentsByActivity) {
+  public static IntentCallingMethod injectIntentInsideReceivingMethod(
+      Body body, Map<String, List<String>> intentsByActivity) {
 
     int newParamIndex = body.getMethod().getParameterCount();
 
-    List<Type> types = ((JimpleBody) body).getMethod().getParameterTypes();
+    List<Type> types = body.getMethod().getParameterTypes();
     List<Type> moreParams = new ArrayList<>(types);
     moreParams.add(RefType.v("android.content.Intent"));
-    ((JimpleBody) body).getMethod().setParameterTypes(moreParams);
+    body.getMethod().setParameterTypes(moreParams);
 
     Iterator<Unit> it = body.getUnits().stream().iterator();
     Unit theUnit = null;
@@ -122,8 +134,8 @@ public class ReceiverUtils {
     if (theUnit != null) {
       body.getUnits().insertAfter(istmt, theUnit);
     } else {
-      //That means currently the method does not take any parameter.
-      //So insert the assignment statement just after the first statement
+      // That means currently the method does not take any parameter.
+      // So insert the assignment statement just after the first statement
       theUnit = body.getUnits().stream().iterator().next();
       body.getUnits().insertAfter(istmt, theUnit);
     }
@@ -145,13 +157,14 @@ public class ReceiverUtils {
       body.getUnits().remove(uToRemove);
     }
 
-    //Now creating intermediate method
+    // Now creating intermediate method
     return createIntermediateMethod(body, intentsByActivity);
   }
 
   /**
-   * An implicit intent is usually received like so: Intent incomingIntent = getIntent()
-   * This method checks if the method body receives this implicit intent.
+   * An implicit intent is usually received like so: Intent incomingIntent = getIntent() This method
+   * checks if the method body receives this implicit intent.
+   *
    * @param body
    * @return
    */
